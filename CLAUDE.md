@@ -31,6 +31,12 @@ AI coding agent. Follow these rules in every session.
 - When rebuilding an existing WinUI app, preserve its behavior and reuse compatible
   business logic, services, and data models. Recreate the UI using Reactor patterns
   rather than carrying over its XAML or ViewModel architecture.
+  - **Tooling prerequisite:** The `mur` CLI is not currently on PATH. Before using it,
+  check whether it is installed but unavailable in the current shell. If needed,
+  follow the Reactor plugin's setup instructions to install it or fix PATH.
+  If `mur` remains unavailable, use `dotnet build` where supported, and report
+  any scaffolding, run, or verification steps that could not be completed.
+  Do not treat a successful build as proof that the app launches or works correctly.
 ## Language
 
 - Reply to the user, present plans, and write **PR titles/bodies and commit messages** in the
