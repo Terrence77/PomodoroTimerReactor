@@ -10,17 +10,34 @@ AI coding agent. Follow these rules in every session.
 - **Never say "done" until it builds.** `dotnet build` and `dotnet test` must pass locally first.
 - Leave PRs as **Draft** and let the human review and merge (squash) manually.
 
-## WinUI
+## Microsoft.UI.Reactor
 
-- **Use the WinUI Agent Plugin for WinUI 3 work.** For scaffolding, XAML/UI, build/run,
-  UI tests, code review, packaging, or migration, delegate to the **`winui:winui-dev`
-  subagent** (Task tool `subagent_type: "winui:winui-dev"`), or run the relevant `winui-*`
-  skill. Do not hand-write WinUI from general knowledge — the plugin has the correct,
-  current patterns and avoids the outdated WPF/UWP APIs general models default to.
-- Target **WinUI 3 / Windows App SDK**. Do **not** use WPF, UWP, or WinForms APIs.
-- Use `ThemeResource` for colors so the UI stays readable in Light and Dark themes.
-- Once the app is scaffolded, build and run it with `.\BuildAndRun.ps1`.
-- Prefer MVVM with `CommunityToolkit.Mvvm` (`[ObservableProperty]`, `[RelayCommand]`).
+- **Use the Reactor Agent Plugin for Microsoft.UI.Reactor work.** For scaffolding,
+  declarative C# UI, build/run, UI tests, code review, packaging, or migration,
+  delegate to the `reactor:reactor-dev` subagent
+  (Task tool `subagent_type: "reactor:reactor-dev"`), or use the relevant skills
+  provided by the Reactor plugin. Do not hand-write Reactor code from general
+  knowledge — follow the plugin's current APIs, patterns, and tooling.
+- Target Microsoft.UI.Reactor on WinUI 3 / Windows App SDK.
+  Do not use WPF, UWP, or WinForms APIs.
+- Build the UI with Reactor's declarative C# components and state patterns.
+  Do not introduce XAML, XAML data binding, or an MVVM/ViewModel layer for UI state.
+  Keep reusable business logic and services separate from UI components.
+- Use the theme-aware resources and styling patterns recommended by the Reactor
+  plugin so the UI stays readable in Light and Dark themes. Avoid hard-coded colors.
+- Follow the Reactor plugin's current scaffolding, build, run, and development-loop
+  instructions. Use `.\BuildAndRun.ps1` only if it exists and supports the Reactor
+  project; otherwise use the workflow generated or recommended by the plugin.
+- When rebuilding an existing WinUI app, preserve its behavior and reuse compatible
+  business logic, services, and data models. Recreate the UI using Reactor patterns
+  rather than carrying over its XAML or ViewModel architecture.
+- **Tooling:** The `mur` CLI is installed as a .NET global tool
+  (`%USERPROFILE%\.dotnet\tools\mur.exe`) and is on PATH in both PowerShell and Bash.
+  If `mur` is ever not found in a shell, verify with `Get-Command mur` (PowerShell) or
+  `which mur` (Bash) before concluding it is missing, and follow the Reactor plugin's
+  setup instructions to fix it. If `mur` remains unavailable, use `dotnet build` where
+  supported, and report any scaffolding, run, or verification steps that could not be
+  completed. Do not treat a successful build as proof that the app launches or works correctly.
 
 ## Language
 
