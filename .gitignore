@@ -1,0 +1,16 @@
+# .NET / WinUI build output
+bin/
+obj/
+[Dd]ebug/
+[Rr]elease/
+*.user
+
+# MSIX / packaging output
+AppPackages/
+*.msix
+*.appx
+*.cer
+*.pfx
+
+# VS / VS Code
+.vs/
