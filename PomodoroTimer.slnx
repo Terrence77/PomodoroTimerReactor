@@ -1,0 +1,24 @@
+<Solution>
+  <Configurations>
+    <Platform Name="ARM64" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/src/">
+    <Project Path="src/PomodoroTimer.Core/PomodoroTimer.Core.csproj">
+      <Platform Solution="*|ARM64" Project="Any CPU" />
+      <Platform Solution="*|x64" Project="Any CPU" />
+      <Platform Solution="*|x86" Project="Any CPU" />
+    </Project>
+    <Project Path="src/PomodoroTimer/PomodoroTimer.csproj">
+      <Deploy />
+    </Project>
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/PomodoroTimer.Core.Tests/PomodoroTimer.Core.Tests.csproj">
+      <Platform Solution="*|ARM64" Project="Any CPU" />
+      <Platform Solution="*|x64" Project="Any CPU" />
+      <Platform Solution="*|x86" Project="Any CPU" />
+    </Project>
+  </Folder>
+</Solution>
