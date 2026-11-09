@@ -154,15 +154,47 @@ public class PomodoroSessionTests
     }
 
     [Fact]
-    public void UpdateDurations_AppliesOnReset()
+    public void UpdateDurations_WhilePaused_AppliesOnReset()
     {
         var session = NewSession();
+        session.Start();
+        session.Tick(TimeSpan.FromSeconds(10));
+        session.Pause();
 
         session.UpdateDurations(TimeSpan.FromMinutes(40), Break);
-        Assert.Equal(Work, session.Remaining);
+        Assert.Equal(Work - TimeSpan.FromSeconds(10), session.Remaining);
 
         session.Reset();
         Assert.Equal(TimeSpan.FromMinutes(40), session.Remaining);
+    }
+
+    [Fact]
+    public void UpdateDurations_WhenIdle_AppliesImmediately()
+    {
+        var session = NewSession();
+        Assert.True(session.IsIdle);
+
+        session.UpdateDurations(TimeSpan.FromMinutes(50), TimeSpan.FromMinutes(10));
+
+        Assert.Equal(PomodoroPhase.Work, session.Phase);
+        Assert.Equal(TimeSpan.FromMinutes(50), session.Remaining);
+        Assert.False(session.IsRunning);
+    }
+
+    [Fact]
+    public void IsIdle_ClearedByStart_RestoredByReset()
+    {
+        var session = NewSession();
+
+        session.Start();
+        session.Pause();
+        Assert.False(session.IsIdle);
+
+        session.Reset();
+        Assert.True(session.IsIdle);
+
+        session.UpdateDurations(TimeSpan.FromMinutes(30), Break);
+        Assert.Equal(TimeSpan.FromMinutes(30), session.Remaining);
     }
 
     [Fact]

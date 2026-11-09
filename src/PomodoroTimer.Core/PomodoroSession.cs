@@ -3,8 +3,8 @@ namespace PomodoroTimer.Core;
 /// <summary>
 /// Pure Pomodoro state machine. Time only advances through <see cref="Tick"/>, so the
 /// caller decides where elapsed time comes from (wall clock in the app, fixed values in tests).
-/// Duration changes are deferred: they apply at the next phase switch or <see cref="Reset"/>,
-/// never to the countdown that is currently running.
+/// Duration changes apply immediately while the session is idle; once started they are
+/// deferred to the next phase switch or <see cref="Reset"/>, never the running countdown.
 /// </summary>
 public sealed class PomodoroSession
 {
@@ -24,11 +24,21 @@ public sealed class PomodoroSession
 
     public bool IsRunning { get; private set; }
 
+    /// <summary>
+    /// True until the first Start after construction or Reset. While idle the session sits at
+    /// the start of a Work phase, so duration changes can be applied immediately.
+    /// </summary>
+    public bool IsIdle { get; private set; } = true;
+
     public TimeSpan WorkDuration { get; private set; }
 
     public TimeSpan BreakDuration { get; private set; }
 
-    public void Start() => IsRunning = true;
+    public void Start()
+    {
+        IsRunning = true;
+        IsIdle = false;
+    }
 
     public void Pause() => IsRunning = false;
 
@@ -36,13 +46,15 @@ public sealed class PomodoroSession
     public void Reset()
     {
         IsRunning = false;
+        IsIdle = true;
         Phase = PomodoroPhase.Work;
         Remaining = WorkDuration;
     }
 
     /// <summary>
-    /// Stores new durations. They take effect at the next phase switch or Reset;
-    /// the countdown in progress is left untouched.
+    /// Stores new durations. While idle (never started since construction or Reset) they apply
+    /// immediately; otherwise they take effect at the next phase switch or Reset and the
+    /// countdown in progress is left untouched.
     /// </summary>
     public void UpdateDurations(TimeSpan workDuration, TimeSpan breakDuration)
     {
@@ -50,6 +62,10 @@ public sealed class PomodoroSession
         ValidateDuration(breakDuration, nameof(breakDuration));
         WorkDuration = workDuration;
         BreakDuration = breakDuration;
+        if (IsIdle)
+        {
+            Remaining = WorkDuration;
+        }
     }
 
     /// <summary>

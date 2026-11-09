@@ -20,7 +20,7 @@ class TimerPage : Component
         var phaseHint = isWork ? "Stay focused" : "Take a short rest";
         var nextLabel = isWork ? "Break" : "Work";
         var nextMinutes = (int)Math.Round(timer.NextPhaseDuration.TotalMinutes);
-        var status = timer.IsRunning ? "Running" : "Paused";
+        var status = timer.IsRunning ? "Running" : timer.IsIdle ? "Ready" : "Paused";
         var timeText = PomodoroSession.Format(timer.Remaining);
 
         var phaseBadge = Border(

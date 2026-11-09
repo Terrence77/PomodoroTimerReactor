@@ -55,7 +55,8 @@ class SettingsPage : Component
                             m => settings with { WorkMinutes = m }),
                         MinutesBox("Break (minutes)", rangeHint, settings.BreakMinutes,
                             m => settings with { BreakMinutes = m }),
-                        Caption("Duration changes apply at the next phase or after Reset.")
+                        Caption("Duration changes apply right away if the timer hasn't started; otherwise at the next phase or after Reset.")
+                            .TextWrapping()
                             .Foreground(Theme.SecondaryText))),
                 Card(
                     VStack(16,
