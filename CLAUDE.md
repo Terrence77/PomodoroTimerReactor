@@ -31,13 +31,6 @@ AI coding agent. Follow these rules in every session.
 - When rebuilding an existing WinUI app, preserve its behavior and reuse compatible
   business logic, services, and data models. Recreate the UI using Reactor patterns
   rather than carrying over its XAML or ViewModel architecture.
-- **Tooling:** The `mur` CLI is installed as a .NET global tool
-  (`%USERPROFILE%\.dotnet\tools\mur.exe`) and is on PATH in both PowerShell and Bash.
-  If `mur` is ever not found in a shell, verify with `Get-Command mur` (PowerShell) or
-  `which mur` (Bash) before concluding it is missing, and follow the Reactor plugin's
-  setup instructions to fix it. If `mur` remains unavailable, use `dotnet build` where
-  supported, and report any scaffolding, run, or verification steps that could not be
-  completed. Do not treat a successful build as proof that the app launches or works correctly.
 
 ## Language
 
