@@ -1,0 +1,14 @@
+{
+  "profiles": {
+    "PomodoroTimer (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "PomodoroTimer (Unpackaged)": {
+      "commandName": "Project"
+    },
+    "PomodoroTimer (Unpackaged, Devtools)": {
+      "commandName": "Project",
+      "commandLineArgs": "--devtools"
+    }
+  }
+}
