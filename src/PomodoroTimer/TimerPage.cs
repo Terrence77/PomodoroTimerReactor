@@ -26,8 +26,11 @@ class TimerPage : Component
         var phaseBadge = Border(
                 // No explicit Foreground: a themed Foreground replaces the typography style,
                 // and the default text brush already follows Light/Dark.
+                // The id goes on the text element so UI Automation reads the bare
+                // "Work"/"Break" value (the Border's Name is "Current phase: ...").
                 Subtitle(phaseLabel)
-                    .HeadingLevel(AutomationHeadingLevel.Level1))
+                    .HeadingLevel(AutomationHeadingLevel.Level1)
+                    .AutomationId("PhaseBadge"))
             .Background(isWork ? Theme.SystemAttentionBackground : Theme.SystemSuccessBackground)
             .WithBorder(Theme.CardStroke, 1)
             .CornerRadius(4)
@@ -38,17 +41,21 @@ class TimerPage : Component
 
         var clock = Display(timeText)
             .HAlign(HorizontalAlignment.Center)
-            .AutomationName($"Remaining time {timeText}");
+            .AutomationName($"Remaining time {timeText}")
+            .AutomationId("TimerClock");
 
         var buttons = HStack(8,
             Button("Start", timer.Start).AccentButton()
                 .IsEnabled(!timer.IsRunning)
-                .MinWidth(96),
+                .MinWidth(96)
+                .AutomationId("BtnStart"),
             Button("Pause", timer.Pause)
                 .IsEnabled(timer.IsRunning)
-                .MinWidth(96),
+                .MinWidth(96)
+                .AutomationId("BtnPause"),
             Button("Reset", timer.Reset)
                 .MinWidth(96)
+                .AutomationId("BtnReset")
         ).HAlign(HorizontalAlignment.Center);
 
         return Card(
@@ -58,7 +65,8 @@ class TimerPage : Component
                     clock,
                     Caption($"{status} · Next: {nextLabel} ({nextMinutes} min)")
                         .Foreground(Theme.SecondaryText)
-                        .HAlign(HorizontalAlignment.Center),
+                        .HAlign(HorizontalAlignment.Center)
+                        .AutomationId("StatusText"),
                     buttons))
             .MinWidth(360)
             .HAlign(HorizontalAlignment.Center)
