@@ -7,7 +7,8 @@ AI coding agent. Follow these rules in every session.
 
 - **One Issue = one branch = one PR.** Keep each task small — about half a day of work.
 - **Never commit directly to `main`.** All changes go through a Pull Request.
-- **Never say "done" until it builds.** `dotnet build` and `dotnet test` must pass locally first.
+- **Never say "done" until it builds.** `mur check` and `dotnet test` must pass locally first.
+  `mur check` is the build (same exit code as `dotnet build`) — do not also run `dotnet build`.
 - Leave PRs as **Draft** and let the human review and merge (squash) manually.
 
 ## Microsoft.UI.Reactor
