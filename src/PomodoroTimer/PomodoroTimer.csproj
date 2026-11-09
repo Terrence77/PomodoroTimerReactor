@@ -47,15 +47,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="*" />
-    <PackageReference Include="Microsoft.WindowsAppSDK" Version="*" />
+    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.28000.2957" />
+    <PackageReference Include="Microsoft.WindowsAppSDK" Version="2.6.5" />
     <!--
       Microsoft.Windows.SDK.BuildTools.WinApp adds first-class support for
       `dotnet run` on packaged apps: it hooks the .NET CLI Run target to
       register a debug identity via the winapp CLI and launch the app with
       package identity (AUMID).
     -->
-    <PackageReference Include="Microsoft.Windows.SDK.BuildTools.WinApp" Version="*" />
+    <PackageReference Include="Microsoft.Windows.SDK.BuildTools.WinApp" Version="0.8.0" />
     <PackageReference Include="Microsoft.UI.Reactor" Version="0.1.0-preview.16" />
   </ItemGroup>
 
