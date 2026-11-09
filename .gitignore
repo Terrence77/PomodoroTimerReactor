@@ -14,3 +14,7 @@ AppPackages/
 
 # VS / VS Code
 .vs/
+
+# UI test output (tests/ui/ui-tests.ps1)
+ui-test-artifacts/
+test-results.json

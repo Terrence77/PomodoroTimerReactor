@@ -29,3 +29,18 @@ No CI, auto-review, or release automation is included — this template is inten
 5. Run `/wrapup`, then review the Draft PR, run the app once yourself, and **squash-merge**.
 
 The loop is: **Issue → `/kickoff` → implement → `/wrapup` → review → squash merge**.
+
+## Running the tests
+
+- **Unit tests** (core logic, no UI): `dotnet test PomodoroTimer.slnx`
+- **UI tests** (drive the real app through UI Automation; needs WinApp CLI 0.7+):
+
+  ```powershell
+  .\tests\ui\ui-tests.ps1                  # runs on this desktop; the app opens and is clicked for a few seconds
+  .\tests\ui\ui-tests.ps1 -Target sandbox  # runs inside Windows Sandbox, once that feature is enabled
+  ```
+
+  The script builds and launches the app, checks that the remaining time decreases after
+  **Start** and returns to its starting value after **Reset**, then closes the app. Results are
+  written to `test-results.json` and screenshots to `ui-test-artifacts/`. Exit code 0 means all
+  tests passed.
