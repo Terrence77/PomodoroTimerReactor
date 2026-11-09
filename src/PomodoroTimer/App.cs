@@ -2,6 +2,7 @@
 using Microsoft.UI.Reactor;
 using Microsoft.UI.Reactor.Core;
 using Microsoft.UI.Reactor.Layout;
+using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using PomodoroTimer;
@@ -48,6 +49,7 @@ class App : Component
         var sessionRef = UseRef<PomodoroSession?>(null);
         var lastTickRef = UseRef(0L);
         var (_, bumpVersion) = UseReducer(0);
+        var window = UseWindow();
 
         sessionRef.Current ??= new PomodoroSession(settings.WorkDuration, settings.BreakDuration);
         var session = sessionRef.Current;
@@ -83,6 +85,7 @@ class App : Component
             session.Phase,
             session.Remaining,
             session.IsRunning,
+            session.IsIdle,
             session.DurationOf(session.Phase == PomodoroPhase.Work ? PomodoroPhase.Break : PomodoroPhase.Work),
             Start: () =>
             {
@@ -120,7 +123,9 @@ class App : Component
                 return;
             }
 
-            // New durations apply at the next phase switch or Reset, not to the running countdown.
+            // New durations apply immediately while the session is idle (never started, or Reset);
+            // otherwise at the next phase switch or Reset. setSettings re-renders the root, which
+            // rebuilds TimerViewState from the session so the Timer page shows the new time.
             session.UpdateDurations(normalized.WorkDuration, normalized.BreakDuration);
             AppServices.SaveSettings(normalized);
             setSettings(normalized);
@@ -130,6 +135,22 @@ class App : Component
         {
             NavItem("Timer", icon: "Clock", tag: TimerTag),
         };
+
+        var isDark = settings.Theme == AppTheme.Dark;
+        var requestedTheme = isDark ? ElementTheme.Dark : ElementTheme.Light;
+
+        // RequestedTheme does not reach the system caption buttons (min/max/close), so they
+        // would follow the Windows app mode. Pin them to the app's chosen theme. (The referenced
+        // Reactor package has no TitleBar.PreferredTheme modifier yet, so set it on AppWindow.)
+        UseEffect(() =>
+        {
+            if (window?.AppWindow is { } appWindow)
+            {
+                appWindow.TitleBar.PreferredTheme = isDark ? TitleBarTheme.Dark : TitleBarTheme.Light;
+            }
+
+            return () => { };
+        }, isDark, window);
 
         var titleBar = TitleBar("Pomodoro Timer")
             .WithNavigation(nav)
@@ -148,8 +169,6 @@ class App : Component
         })
         .IsPaneOpen(isPaneOpen, setIsPaneOpen)
         .Flex(grow: 1, basis: 0);
-
-        var requestedTheme = settings.Theme == AppTheme.Dark ? ElementTheme.Dark : ElementTheme.Light;
 
         return FlexColumn(titleBar, navView)
             .Background(Theme.SolidBackground)
